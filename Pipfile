@@ -5,6 +5,7 @@ name = "pypi"
  
 [packages]
 flask = "*"
+ifcopenshell = "*"
  
 [requires]
 python_version = "3.9"

@@ -1,1 +1,2 @@
 Flask==2.2.2
+ifcopenshell==0.7.0
