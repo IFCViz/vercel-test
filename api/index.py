@@ -8,7 +8,7 @@ class handler(BaseHTTPRequestHandler):
 		self.send_response(200)
 		self.send_header('Content-type','application/json')
 		self.end_headers()
-		self.wfile.write('{"message": "Hello World!"}'.encode('utf-8'))
+		self.wfile.write('{"message": "Hello Anders!"}'.encode('utf-8'))
 
 		"""
 		self.send_response(200)
