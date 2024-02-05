@@ -1,5 +1,10 @@
 from http.server import BaseHTTPRequestHandler
 import json
+import socketserver
+from http import HTTPStatus
+from urllib.parse import parse_qs
+import cgi
+
  
 class handler(BaseHTTPRequestHandler):
 
@@ -16,11 +21,35 @@ class handler(BaseHTTPRequestHandler):
 	# receive a IFC file in a post request and return a json with the IFC file name
 	def do_POST(self):
 
-		# get the content length of the request
-		content_length = int(self.headers['Content-Length'])
-
-		# read the content of the request
-		post_data = self.rfile.read(content_length)
+		# parse as multipart/form-data
+		form = cgi.FieldStorage(
+			fp=self.rfile,
+			headers=self.headers,
+			environ={'REQUEST_METHOD':'POST',
+					'CONTENT_TYPE':self.headers['Content-Type'],
+					})
+		
+		# check if the file is in the form
+		if "file" not in form:
+			self.send_response(400)
+			self.send_header('Content-type','application/json')
+			self.end_headers()
+			self.wfile.write(json.dumps({"message": "No file found"}).encode('utf-8'))
+			return
+		
+		# get the file from the form
+		fileitem = form["file"]
+		
+		# check if the file is in the form
+		if fileitem.filename == '':
+			self.send_response(400)
+			self.send_header('Content-type','application/json')
+			self.end_headers()
+			self.wfile.write(json.dumps({"message": "No file found"}).encode('utf-8'))
+			return
+		
+		# read the file
+		post_data = fileitem.file.read()
 
 		# write the content to a file
 		filename = "ifc_file.ifc"
@@ -47,6 +76,7 @@ def process_file(filename):
 	#model = ifcopenshell.open('./Wellness_center_Sama.ifc')
 	model = ifcopenshell.open(filename)
 	#print(model.schema)
+	"""
 	walls = model.by_type('IfcWall')
 	print(len(walls))
 
@@ -55,6 +85,7 @@ def process_file(filename):
 		container = ifcopenshell.util.element.get_container(wall)
 		# The wall is located on Level 01
 		print(f"The wall is located on {container.Name}")
+	"""
 
 	my_list = []
 	for storey in model.by_type("IfcBuildingStorey"):
@@ -65,3 +96,15 @@ def process_file(filename):
 					my_list.append(element.Name)
 	
 	return my_list
+
+
+
+if __name__ == '__main__':
+	with socketserver.TCPServer(("", 8080), handler) as httpd:
+		print("serving at port", 8080)
+		httpd.serve_forever()
+		
+	# start the server
+	# from http.server import HTTPServer
+	# server = HTTPServer(('', 8080), handler)
+	# server.serve_forever()
