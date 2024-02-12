@@ -31,11 +31,16 @@
                     // Update the response variable to show it in the pre tag
                     response.value = JSON.stringify(data, null, 2);
                     console.log("value: " + response.value);
-                    json = JSON.parse(response.value);
+                    ifc_info = JSON.parse(response.value);
+
+                    Object.keys(ifc_info).forEach(function(k){
+                        console.log(k + ' - ' + ifc_info[k]);
+                        para = document.createElement("p");
+                        para.innerText = k + " : " + ifc_info[k];
+                        document.body.appendChild(para);
+                    });
                     
-                    para = document.createElement("p");
-                    para.innerText = response.value;
-                    document.body.appendChild(para);
+                    
                     
                 } catch (error) {
                     console.error('Error uploading file:', error);
