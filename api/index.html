@@ -31,7 +31,7 @@
                     // Update the response variable to show it in the pre tag
                     response.value = JSON.stringify(data, null, 2);
                     console.log("value: " + response.value);
-                    ifc_info = JSON.parse(response.value)[0];
+                    ifc_info = JSON.parse(response.value);
                     let containerDiv = document.createElement('div');
                     containerDiv.classList.add('info-container');
 
