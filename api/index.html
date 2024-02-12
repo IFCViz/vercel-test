@@ -1,27 +1,6 @@
+<html>
 <head>
-</head>
-
-<body>
-<div id="app">
-	<!-- <button @click="count++">{{ count }}</button> -->
-
-    <div
-        id="droptarget" 
-	ondragover="allowDrop(event)"
-        ondrop="handleDrop(event)"
-        style="border: 2px dashed #ccc; padding: 20px; margin-top: 20px;"
-    >
-        Drop your file here
-    </div>
-
-    <div id="container">
-
-    </div>
-
-    <pre v-if="response">{{ response }}</pre>
-</div>
-
-<script>
+    <script>
 
     
 		function allowDrop(ev) {
@@ -72,6 +51,29 @@
         
 </script>
 
+</head>
+
+<body>
+<div id="app">
+	<!-- <button @click="count++">{{ count }}</button> -->
+
+    <div
+        id="droptarget" 
+	ondragover="allowDrop(event)"
+        ondrop="handleDrop(event)"
+        style="border: 2px dashed #ccc; padding: 20px; margin-top: 20px;"
+    >
+        Drop your file here
+    </div>
+
+    <div id="container">
+
+    </div>
+
+    <pre v-if="response">{{ response }}</pre>
+</div>
+
+
 
 <style>
     #app {
@@ -111,3 +113,4 @@
     }
 </style>
 </body>
+</html>
