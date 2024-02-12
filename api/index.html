@@ -31,14 +31,28 @@
                     // Update the response variable to show it in the pre tag
                     response.value = JSON.stringify(data, null, 2);
                     console.log("value: " + response.value);
-                    ifc_info = JSON.parse(response.value);
+                    ifc_info = JSON.parse(response.value)[0];
+                    let containerDiv = document.createElement('div');
+                    containerDiv.classList.add('info-container');
 
-                    Object.keys(ifc_info).forEach(function(k){
-                        console.log(k + ' - ' + ifc_info[k]);
-                        para = document.createElement("p");
-                        para.innerText = k + " : " + ifc_info[k];
-                        document.body.appendChild(para);
+                    Object.keys(ifc_info).forEach(function(k) {
+                        let infoDiv = document.createElement('div');
+                        infoDiv.classList.add('info-div');
+
+                        let keySpan = document.createElement('span');
+                        keySpan.classList.add('info-key');
+                        keySpan.innerText = k + ': ';
+
+                        let valueSpan = document.createElement('span');
+                        valueSpan.classList.add('info-value');
+                        valueSpan.innerText = ifc_info[k];
+
+                        infoDiv.appendChild(keySpan);
+                        infoDiv.appendChild(valueSpan);
+                        containerDiv.appendChild(infoDiv);
                     });
+
+document.getElementById('container').appendChild(containerDiv)
                     
                     
                     
@@ -76,6 +90,28 @@
 
 
 <style>
+    .info-container {
+        display: flex;
+        flex-direction: column;
+        margin-top: 20px;
+    }
+
+    .info-div {
+        display: flex;
+        justify-content: space-between;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin-bottom: 5px;
+    }
+
+    .info-key {
+        font-weight: bold;
+    }
+
+    .info-value {
+        color: #555;
+    }
     #app {
         text-align: center;
         margin-top: 50px;
