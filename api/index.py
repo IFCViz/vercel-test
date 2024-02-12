@@ -14,7 +14,7 @@ class handler(BaseHTTPRequestHandler):
 		self.send_response(200)
 		self.send_header('Content-type','text/html')
 		self.end_headers()
-		self.wfile.write(open('index.html', 'r').read())
+		self.wfile.write(open('index.html', 'r').read().encode('utf-8'))
 		return
 	
 	# receive a IFC file in a post request and return a json with the IFC file name
