@@ -1,0 +1,113 @@
+<head>
+</head>
+
+<body>
+<div id="app">
+	<!-- <button @click="count++">{{ count }}</button> -->
+
+    <div
+        id="droptarget" 
+	ondragover="allowDrop(event)"
+        ondrop="handleDrop"
+        style="border: 2px dashed #ccc; padding: 20px; margin-top: 20px;"
+    >
+        Drop your file here
+    </div>
+
+    <div id="container">
+
+    </div>
+
+    <pre v-if="response">{{ response }}</pre>
+</div>
+
+<script>
+
+    
+		function allowDrop(ev) {
+  ev.preventDefault();
+}
+
+            function handleDrop(event) {
+                event.preventDefault();
+
+                const file = event.dataTransfer.files[0];
+
+                if (file) {
+                    uploadFile(file);
+                }
+            }
+
+            async function uploadFile(file) {
+                const formData = new FormData();
+                formData.append('file', file);
+                
+                try {
+                    const response = await fetch('http://46.101.114.188:8080',{
+                        method: 'POST',
+                        body: formData,
+                    });
+                    
+                    const data = await response.json();
+                    // Update the response variable to show it in the pre tag
+                    response.value = JSON.stringify(data, null, 2);
+                    console.log("value: " + response.value);
+                    json = JSON.parse(response.value);
+                    
+                    para = document.createElement("p");
+                    para.innerText = response.value;
+                    document.body.appendChild(para);
+                    
+                } catch (error) {
+                    console.error('Error uploading file:', error);
+                }
+            }
+
+            return {
+                count,
+                increment,
+                handleDrop,
+                response,
+            };
+        
+</script>
+
+
+<style>
+    #app {
+        text-align: center;
+        margin-top: 50px;
+    }
+
+    button {
+        font-size: 16px;
+        padding: 10px 20px;
+        margin-bottom: 20px;
+        cursor: pointer;
+        background-color: #4caf50;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+    }
+
+    button:hover {
+        background-color: #45a049;
+    }
+
+    #file-drop-area {
+        border: 2px dashed #ccc;
+        padding: 20px;
+        margin-top: 20px;
+        cursor: pointer;
+    }
+
+    pre {
+        background-color: #f5f5f5;
+        padding: 10px;
+        border-radius: 4px;
+        overflow: auto;
+        max-width: 600px;
+        margin: 20px auto;
+    }
+</style>
+</body>
