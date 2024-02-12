@@ -31,7 +31,7 @@
                     // Update the response variable to show it in the pre tag
                     response.value = JSON.stringify(data, null, 2);
                     console.log("value: " + response.value);
-                    ifc_info = JSON.parse(response.value);
+                    ifc_info = JSON.parse(response.value)["my_list"];
                     let containerDiv = document.createElement('div');
                     containerDiv.classList.add('info-container');
 
@@ -84,7 +84,7 @@ document.getElementById('container').appendChild(containerDiv)
 
     </div>
 
-    <pre v-if="response">{{ response }}</pre>
+    
 </div>
 
 
