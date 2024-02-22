@@ -35,22 +35,24 @@
                     let containerDiv = document.createElement('div');
                     containerDiv.classList.add('info-container');
 
-                    Object.keys(ifc_info).forEach(function(k) {
-                        let infoDiv = document.createElement('div');
-                        infoDiv.classList.add('info-div');
+                    for (let i = 0; i < ifc_info.length; i++) {
+                        Object.keys(ifc_info[i]).forEach(function(k) {
+                            let infoDiv = document.createElement('div');
+                            infoDiv.classList.add('info-div');
 
-                        let keySpan = document.createElement('span');
-                        keySpan.classList.add('info-key');
-                        keySpan.innerText = k + ': ';
+                            let keySpan = document.createElement('span');
+                            keySpan.classList.add('info-key');
+                            keySpan.innerText = k + ': ';
 
-                        let valueSpan = document.createElement('span');
-                        valueSpan.classList.add('info-value');
-                        valueSpan.innerText = ifc_info[k];
+                            let valueSpan = document.createElement('span');
+                            valueSpan.classList.add('info-value');
+                            valueSpan.innerText = ifc_info[i][k] + " kvm";
 
-                        infoDiv.appendChild(keySpan);
-                        infoDiv.appendChild(valueSpan);
-                        containerDiv.appendChild(infoDiv);
-                    });
+                            infoDiv.appendChild(keySpan);
+                            infoDiv.appendChild(valueSpan);
+                            containerDiv.appendChild(infoDiv);
+                        });
+                    }
 
 document.getElementById('container').appendChild(containerDiv)
                     
