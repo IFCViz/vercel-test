@@ -6,7 +6,8 @@ from urllib.parse import parse_qs
 import cgi
 import ifcopenshell
 import ifcopenshell.util.element
-
+import os
+cwd = os.getcwd()
 
 class handler(BaseHTTPRequestHandler):
 
@@ -16,7 +17,7 @@ class handler(BaseHTTPRequestHandler):
 		self.send_response(200)
 		self.send_header('Content-type','text/html')
 		self.end_headers()
-		self.wfile.write(open('index.html', 'r').read().encode('utf-8'))
+		self.wfile.write(open(cwd + '/index.html', 'r').read().encode('utf-8'))
 		return
 	
 	# receive a IFC file in a post request and return a json with the IFC file name
