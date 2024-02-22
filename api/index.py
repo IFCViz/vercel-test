@@ -4,8 +4,10 @@ import socketserver
 from http import HTTPStatus
 from urllib.parse import parse_qs
 import cgi
+import ifcopenshell
+import ifcopenshell.util.element
 
- 
+
 class handler(BaseHTTPRequestHandler):
 
 	def do_GET(self):
@@ -68,34 +70,34 @@ class handler(BaseHTTPRequestHandler):
 		return
 
 
-import ifcopenshell
-import ifcopenshell.util.element
+def process_file(file_name):
+	model = ifcopenshell.open(file_name)
 
-def process_file(filename):
-	#model = ifcopenshell.open('./Wellness_center_Sama.ifc')
-	model = ifcopenshell.open(filename)
-	#print(model.schema)
-	"""
-	walls = model.by_type('IfcWall')
-	print(len(walls))
+	# Get model name
+	model_name = file_name.split("/")[-1]
+	# Make the name cleaner
+	# model_name = model_name.split(".")[0].replace("_", " ").replace("-", " ").title()
+	# print(model_name)
+	json_dict = {model_name: {"floors": []}}
 
-	for wall in walls:
-		# Walls are typically located on a storey, equipment might be located in spaces, etc
-		container = ifcopenshell.util.element.get_container(wall)
-		# The wall is located on Level 01
-		print(f"The wall is located on {container.Name}")
-	"""
+	floors = [floor for floor in model.by_type('IfcSlab') if
+			  ifcopenshell.util.element.get_predefined_type(floor) == "FLOOR"]
+	if len(floors) == 0:
+		return "No floors found!<br>"
 
-	my_list = []
-	for storey in model.by_type("IfcBuildingStorey"):
-			elements = ifcopenshell.util.element.get_decomposition(storey)
-			print(f"There are {len(elements)} located on storey {storey.Name}, they are:")
-			for element in elements:
-					#print(element.Name)
-					my_list.append(element.Name)
-	
-	return my_list
+	result = f"Amount of floor type objects: {len(floors)}<br><br>"
 
+	for floor in floors:
+		# Get the right properties
+		properties = ifcopenshell.util.element.get_psets(floor)
+		base_properties = properties["BaseQuantities"]
+
+		json_dict[model_name]["floors"].append({floor.Name: base_properties['GrossArea']})
+	#         result += f"Object name: {floor.Name}<br>"
+	#         result += f"&emsp;&emsp;Area: {base_properties['GrossArea']} m^2<br>"
+	final_json = json.dumps(json_dict)
+	print(final_json)
+	return json_dict[model_name]["floors"]
 
 
 if __name__ == '__main__':
